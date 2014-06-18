@@ -25,16 +25,14 @@ public class Game {
       int move = getPlayerMove();
       board[move-1] = "X";
       boardPrinter.drawBoard(board);
+
     } catch(Exception e) {
       e.printStackTrace();
     }
   }
 
-  public int getPlayerMove() throws IOException, WrongInputException {
+  public int getPlayerMove() throws IOException {
     int playerAnswer = Integer.parseInt(inputCollector.readLine());
-    if(playerAnswer < 1 || playerAnswer > 9) {
-      throw new WrongInputException("Please pick a number between 1 and 9 next time.");
-    }
     return playerAnswer;
   }
 
