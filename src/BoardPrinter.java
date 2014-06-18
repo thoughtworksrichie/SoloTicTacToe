@@ -12,8 +12,19 @@ public class BoardPrinter {
   }
 
   public String viewBoard(String[] board) {
+    String text = oneRowOfBoard(0, 3, false, board);
+    text += oneRowOfBoard(3, 6, false, board);
+    text += oneRowOfBoard(6, 9, true, board);
+    return text;
+  }
+
+  public void drawBoard(String[] board) {
+    out.println(viewBoard(board));
+  }
+
+  private String oneRowOfBoard(int min, int max, boolean isLastRow, String[] board) {
     String text = "";
-    for(int i=0;i<3;i++) {
+    for(int i=min;i<max;i++) {
       if (board[i] == "X") {
         text += "X";
       } else if (board[i] == "O") {
@@ -21,41 +32,14 @@ public class BoardPrinter {
       } else {
         text += " ";
       }
-      if (i == 0 || i == 1) {
+      if (i == min || i == min+1) {
         text += "|";
       }
     }
-    text += "\n-----\n";
-    for(int i=3;i<6;i++) {
-      if(board[i] == "X") {
-        text += "X";
-      } else if(board[i] == "O") {
-        text += "O";
-      } else {
-        text += " ";
-      }
-      if(i == 3 || i == 4) {
-        text += "|";
-      }
-    }
-    text += "\n-----\n";
-    for(int i=6;i<9;i++) {
-      if(board[i] == "X") {
-        text += "X";
-      } else if(board[i] == "O") {
-        text += "O";
-      } else {
-        text += " ";
-      }
-      if(i == 6 || i == 7) {
-        text += "|";
-      }
+    if(!isLastRow) {
+      text += "\n-----\n";
     }
     return text;
-  }
-
-  public void drawBoard(String[] board) {
-    out.println(viewBoard(board));
   }
 
 }
