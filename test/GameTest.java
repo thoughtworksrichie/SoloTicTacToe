@@ -15,23 +15,25 @@ import static org.mockito.Mockito.*;
 public class GameTest {
 
   private Game game;
-  private String[] strings;
+  private String[] board;
   private BufferedReader inputCollector;
+  MessagePrinter messagePrinter;
+  BoardPrinter boardPrinter;
 
   @Before
   public void setUp() {
     inputCollector = mock(BufferedReader.class);
-    MessagePrinter messagePrinter = mock(MessagePrinter.class);
-    BoardPrinter boardPrinter = mock(BoardPrinter.class);
-    strings = new String[9];
-    game = new Game(inputCollector, messagePrinter, boardPrinter, strings);
+    messagePrinter = mock(MessagePrinter.class);
+    boardPrinter = mock(BoardPrinter.class);
+    board = new String[9];
+    game = new Game(inputCollector, messagePrinter, boardPrinter, board);
   }
 
   @Test
   public void shouldBeBlankOnGameStart() {
     // verify that the game's board is initially blank
-    assertThat(Arrays.asList(strings).contains("X"), is(false));
-    assertThat(Arrays.asList(strings).contains("O"), is(false));
+    assertThat(Arrays.asList(board).contains("X"), is(false));
+    assertThat(Arrays.asList(board).contains("O"), is(false));
   }
 
   @Test
@@ -39,16 +41,20 @@ public class GameTest {
     // verify that the correct array position is marked upon user input
     when(inputCollector.readLine()).thenReturn("1");
     game.go();
-    assertThat(strings[0], is("X"));
+    assertThat(board[0], is("X"));
   }
 
   @Test
-  public void shouldPrintPlayer1MoveMessageOnGameStart() {
-  
+  public void shouldPrintPlayer2MoveMessageAfterPlayer1Moves() throws IOException {
+    when(inputCollector.readLine()).thenReturn("5");
+    game.go();
+    verify(messagePrinter).print("Player 2: Enter a move.");
   }
 
   @Test
-  public void shouldPrintPlayer2MoveMessageAfterPlayer1Moves() {
-
+  public void shouldPrintPlayer1MoveMessageOnGameStart() throws IOException {
+    when(inputCollector.readLine()).thenReturn("5");
+    game.go();
+    verify(messagePrinter).print("Player 1: Enter a move.");
   }
 }

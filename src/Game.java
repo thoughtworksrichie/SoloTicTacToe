@@ -25,7 +25,10 @@ public class Game {
       int move = getPlayerMove();
       board[move-1] = "X";
       boardPrinter.drawBoard(board);
-
+      messagePrinter.print("Player 2: Enter a move.");
+//      move = getPlayerMove();
+//      board[move-1] = "O";
+//      boardPrinter.drawBoard(board);
     } catch(Exception e) {
       e.printStackTrace();
     }
