@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 /**
  * Created by richiethomas on 6/18/14.
  */
-public class AppTest {
+public class BoardPrinterTest {
 
   @Test
   public void shouldDrawBoard() {
