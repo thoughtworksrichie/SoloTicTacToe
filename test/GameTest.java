@@ -41,4 +41,10 @@ public class GameTest {
     game.go();
     assertThat(strings[0], is("X"));
   }
+
+  public void shouldThrowErrorIfWrongInputFormat() throws WrongInputException, IOException {
+    when(inputCollector.readLine()).thenReturn("1");
+    game.go();
+    assertThat(strings[0], is("X"));
+  }
 }
