@@ -20,11 +20,11 @@ public class Game {
 
   public void go() {
     try {
-      boardPrinter.print();
-
+      boardPrinter.drawBoard(board);
       messagePrinter.print("Player 1: Enter a move.");
       int move = getPlayerMove();
       board[move-1] = "X";
+      boardPrinter.drawBoard(board);
     } catch(Exception e) {
       e.printStackTrace();
     }
