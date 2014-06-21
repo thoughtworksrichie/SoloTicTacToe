@@ -2,6 +2,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
@@ -16,30 +18,31 @@ public class BoardPrinterTest {
 
   private PrintStream printStream;
   private BoardPrinter boardPrinter;
+  private ArrayList<String> board;
 
   @Before
   public void setUp() {
     printStream = mock(PrintStream.class);
-    boardPrinter = new BoardPrinter(printStream);
+    board = new ArrayList<String>(Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " "));
+    boardPrinter = new BoardPrinter(printStream, board);
   }
 
   @Test
   public void shouldDrawEmptyBoardOnStartup() {
-    String[] board = new String[9];
-    assertThat(boardPrinter.viewBoard(board), is(" | | \n-----\n | | \n-----\n | | "));
+    boardPrinter.drawBoard(board);
+    verify(printStream).println(" | | \n-----\n | | \n-----\n | | ");
   }
 
   @Test
   public void shouldReturnBoardWithCorrectMoves() {
-    String[] board = new String[9];
-    board[3] = "X";
-    assertThat(boardPrinter.viewBoard(board), is(" | | \n-----\nX| | \n-----\n | | "));
+    board.set(3, "X");
+    boardPrinter.drawBoard(board);
+    verify(printStream).println(" | | \n-----\nX| | \n-----\n | | ");
   }
 
   @Test
   public void shouldDrawBoardWithCorrectMovedIndicated() {
-    String[] board = new String[9];
-    board[3] = "X";
+    board.set(3, "X");
     boardPrinter.drawBoard(board);
     verify(printStream).println(" | | \n-----\nX| | \n-----\n | | ");
   }

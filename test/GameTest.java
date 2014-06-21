@@ -3,7 +3,10 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -15,18 +18,18 @@ import static org.mockito.Mockito.*;
 public class GameTest {
 
   private Game game;
-  private String[] board;
+  private List<String> board;
   private BufferedReader inputCollector;
-  MessagePrinter messagePrinter;
+  PrintStream out;
   BoardPrinter boardPrinter;
 
   @Before
   public void setUp() {
     inputCollector = mock(BufferedReader.class);
-    messagePrinter = mock(MessagePrinter.class);
+    out = mock(PrintStream.class);
     boardPrinter = mock(BoardPrinter.class);
-    board = new String[9];
-    game = new Game(inputCollector, messagePrinter, boardPrinter, board);
+    board = new ArrayList<String>(Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " "));
+    game = new Game(inputCollector, out, boardPrinter, board);
   }
 
   @Test
@@ -41,20 +44,20 @@ public class GameTest {
     // verify that the correct array position is marked upon user input
     when(inputCollector.readLine()).thenReturn("1");
     game.go();
-    assertThat(board[0], is("X"));
-  }
-
-  @Test
-  public void shouldPrintPlayer2MoveMessageAfterPlayer1Moves() throws IOException {
-    when(inputCollector.readLine()).thenReturn("5");
-    game.go();
-    verify(messagePrinter).print("Player 2: Enter a move.");
+    assertThat(board.get(0), is("X"));
   }
 
   @Test
   public void shouldPrintPlayer1MoveMessageOnGameStart() throws IOException {
     when(inputCollector.readLine()).thenReturn("5");
     game.go();
-    verify(messagePrinter).print("Player 1: Enter a move.");
+    verify(out).print("Player 1: Enter a move.\n");
+  }
+
+  @Test
+  public void shouldPrintPlayer2MoveMessageAfterPlayer1Moves() throws IOException {
+    when(inputCollector.readLine()).thenReturn("5");
+    game.go();
+    verify(out).print("Player 2: Enter a move.\n");
   }
 }

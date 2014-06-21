@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
-import java.util.Scanner;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.InputStreamReader;
 
 
@@ -8,12 +11,15 @@ import java.io.InputStreamReader;
  */
 public class App {
   public static void main(String[] args) {
-    MessagePrinter messagePrinter = new MessagePrinter(System.out);
-    BoardPrinter boardPrinter = new BoardPrinter(System.out);
+
+    List<String> board = new ArrayList<String>(
+            Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " "));
+
+    BoardPrinter boardPrinter = new BoardPrinter(System.out, board);
     InputStreamReader isr = new InputStreamReader(System.in);
     BufferedReader inputCollector = new BufferedReader(isr);
-    String[] board = new String[9];
-    Game game = new Game(inputCollector, messagePrinter, boardPrinter, board);
+    PrintStream out = System.out;
+    Game game = new Game(inputCollector, out, boardPrinter, board);
     game.go();
   }
 }
