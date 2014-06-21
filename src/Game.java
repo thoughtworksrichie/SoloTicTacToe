@@ -36,6 +36,10 @@ public class Game {
     try {
     out.print(String.format("Player %s: Enter a move.\n", player.number));
     int move = getPlayerMove();
+    while(board.get(move-1) != " ") {
+      out.println("Location already taken. Please choose again.");
+      move = getPlayerMove();
+    }
     board.set(move-1, player.symbol);
     } catch(Exception e) {
       e.printStackTrace();

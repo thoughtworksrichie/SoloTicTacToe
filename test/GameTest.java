@@ -60,4 +60,11 @@ public class GameTest {
     game.go();
     verify(out).print("Player 2: Enter a move.\n");
   }
+
+  @Test
+  public void shouldPrintLocationTakenWhenLocationTaken() throws IOException {
+    when(inputCollector.readLine()).thenReturn("5").thenReturn("5").thenReturn("6");
+    game.go();
+    verify(out).println("Location already taken. Please choose again.");
+  }
 }
