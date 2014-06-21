@@ -12,6 +12,8 @@ public class Game {
   private BufferedReader inputCollector;
   private BoardPrinter boardPrinter;
   private PrintStream out;
+  private Player player1;
+  private Player player2;
 
   public Game(BufferedReader inputCollector, PrintStream out, BoardPrinter boardPrinter, List<String> board) {
     this.board = board;
@@ -21,16 +23,20 @@ public class Game {
   }
 
   public void go() {
+      player1 = new Player("1", "X");
+      player2 = new Player("2", "O");
+      boardPrinter.drawBoard(board);
+      takeTurn(player1);
+      boardPrinter.drawBoard(board);
+      takeTurn(player2);
+      boardPrinter.drawBoard(board);
+  }
+
+  public void takeTurn(Player player) {
     try {
-      boardPrinter.drawBoard(board);
-      out.print("Player 1: Enter a move.\n");
-      int move = getPlayerMove();
-      board.set(move-1, "X");
-      boardPrinter.drawBoard(board);
-      out.print("Player 2: Enter a move.\n");
-//      move = getPlayerMove();
-//      board[move-1] = "O";
-//      boardPrinter.drawBoard(board);
+    out.print(String.format("Player %s: Enter a move.\n", player.number));
+    int move = getPlayerMove();
+    board.set(move-1, player.symbol);
     } catch(Exception e) {
       e.printStackTrace();
     }
