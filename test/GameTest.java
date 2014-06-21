@@ -67,4 +67,13 @@ public class GameTest {
     game.go();
     verify(out).println("Location already taken. Please choose again.");
   }
+
+  @Test
+  public void shouldPrintDrawMessageWhenPlayersTie() throws IOException {
+    when(inputCollector.readLine()).thenReturn("5").thenReturn("3")
+            .thenReturn("7").thenReturn("4").thenReturn("1").thenReturn("2")
+            .thenReturn("8").thenReturn("9").thenReturn("6");
+    game.go();
+    verify(out).println("Game is a draw.");
+  }
 }

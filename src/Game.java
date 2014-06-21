@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,15 +35,36 @@ public class Game {
 
   public void takeTurn(Player player) {
     try {
-    out.print(String.format("Player %s: Enter a move.\n", player.number));
-    int move = getPlayerMove();
+      displayEnterMoveMessage(player);
+      int move = getPlayerMove();
+      move = isPositionTaken(move);
+      setPlayerMove(player, move);
+      checkIfGameOver(board);
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private int isPositionTaken(int move) throws IOException {
     while(board.get(move-1) != " ") {
       out.println("Location already taken. Please choose again.");
       move = getPlayerMove();
     }
+    return move;
+  }
+
+  private void displayEnterMoveMessage(Player player) {
+    out.print(String.format("Player %s: Enter a move.\n", player.number));
+  }
+
+  private void setPlayerMove(Player player, int move) {
     board.set(move-1, player.symbol);
-    } catch(Exception e) {
-      e.printStackTrace();
+  }
+
+  private void checkIfGameOver(List<String> board) {
+    if(!board.contains(" ")) {
+      out.println("Game is a draw");
+      System.exit(0);
     }
   }
 
