@@ -1,12 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -17,63 +13,60 @@ import static org.mockito.Mockito.*;
  */
 public class GameTest {
 
-  private Game game;
-  private List<String> board;
-  private BufferedReader inputCollector;
-  PrintStream out;
-  BoardPrinter boardPrinter;
+    private Game game;
+    private Board board;
+    private PlayerAlternator alternator;
+    private InputOutputHelper ioHelper;
+    private PrintStream out;
+    private Player player;
 
-  @Before
-  public void setUp() {
-    inputCollector = mock(BufferedReader.class);
-    out = mock(PrintStream.class);
-    boardPrinter = mock(BoardPrinter.class);
-    board = new ArrayList<String>(Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " "));
-    game = new Game(inputCollector, out, boardPrinter, board);
-  }
+    @Before
+    public void setUp() {
+        out = mock(PrintStream.class);
+        alternator = mock(PlayerAlternator.class);
+        board = mock(Board.class);
+        ioHelper = mock(InputOutputHelper.class);
+        player = mock(Player.class);
+        when(player.getSymbol()).thenReturn("X");
+        game = new Game(board, alternator, out);
+    }
 
-  @Test
-  public void shouldBeBlankOnGameStart() {
-    // verify that the game's board is initially blank
-    assertThat(Arrays.asList(board).contains("X"), is(false));
-    assertThat(Arrays.asList(board).contains("O"), is(false));
-  }
+    @Test
+    public void shouldBeADrawWhenBoardIsFull() throws Exception {
+        when(board.isFull()).thenReturn(true);
+        game.go();
+        verify(out).println("Game is a draw.");
+    }
 
-  @Test
-  public void shouldMarkCorrectPositionUponUserInput() throws IOException {
-    // verify that the correct array position is marked upon user input
-    when(inputCollector.readLine()).thenReturn("1");
-    game.go();
-    assertThat(board.get(0), is("X"));
-  }
+    @Test
+    public void shouldPrintBoardWhenGameStarts() throws Exception {
+        when(alternator.setFirstPlayer()).thenReturn(player);
+        when(board.isFull()).thenReturn(false).thenReturn(true);
+        game.go();
+        verify(board).draw();
+    }
 
-  @Test
-  public void shouldPrintPlayer1MoveMessageOnGameStart() throws IOException {
-    when(inputCollector.readLine()).thenReturn("5");
-    game.go();
-    verify(out).print("Player 1: Enter a move.\n");
-  }
+    @Test
+    public void shouldMovePlayer() throws IOException {
+        when(alternator.setFirstPlayer()).thenReturn(player);
+        when(board.isFull()).thenReturn(false).thenReturn(true);
+        game.go();
+        verify(player).move();
+    }
 
-  @Test
-  public void shouldPrintPlayer2MoveMessageAfterPlayer1Moves() throws IOException {
-    when(inputCollector.readLine()).thenReturn("5");
-    game.go();
-    verify(out).print("Player 2: Enter a move.\n");
-  }
+    @Test
+    public void shouldSetFirstPlayerAssignment() throws IOException {
+        when(board.isFull()).thenReturn(true);
+        game.go();
+        verify(alternator).setFirstPlayer();
+    }
 
-  @Test
-  public void shouldPrintLocationTakenWhenLocationTaken() throws IOException {
-    when(inputCollector.readLine()).thenReturn("5").thenReturn("5").thenReturn("6");
-    game.go();
-    verify(out).println("Location already taken. Please choose again.");
-  }
+    @Test
+    public void shouldAlternatePlayer() throws Exception {
+        when(board.isFull()).thenReturn(false).thenReturn(true);
+        when(alternator.setFirstPlayer()).thenReturn(player);
+        game.go();
+        verify(alternator).toggleCurrentPlayer();
+    }
 
-  @Test
-  public void shouldPrintDrawMessageWhenPlayersTie() throws IOException {
-    when(inputCollector.readLine()).thenReturn("5").thenReturn("3")
-            .thenReturn("7").thenReturn("4").thenReturn("1").thenReturn("2")
-            .thenReturn("8").thenReturn("9").thenReturn("6");
-    game.go();
-    verify(out).println("Game is a draw.");
-  }
 }

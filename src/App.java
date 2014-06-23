@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.io.InputStreamReader;
 
 
@@ -11,15 +9,18 @@ import java.io.InputStreamReader;
  */
 public class App {
   public static void main(String[] args) {
-
-    List<String> board = new ArrayList<String>(
-            Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " "));
-
-    BoardPrinter boardPrinter = new BoardPrinter(System.out, board);
-    InputStreamReader isr = new InputStreamReader(System.in);
-    BufferedReader inputCollector = new BufferedReader(isr);
-    PrintStream out = System.out;
-    Game game = new Game(inputCollector, out, boardPrinter, board);
-    game.go();
+    try {
+        PrintStream out = System.out;
+        Board board = new Board(out, Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " "));
+        InputStreamReader isr = new InputStreamReader(System.in);
+        InputOutputHelper ioHelper = new InputOutputHelper(new BufferedReader(isr), out);
+        Player player1 = new Player(ioHelper, "X", board);
+        Player player2 = new Player(ioHelper, "O", board);
+        PlayerAlternator alternator = new PlayerAlternator(player1, player1, player2);
+        Game game = new Game(board, alternator, out);
+        game.go();
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
   }
 }
