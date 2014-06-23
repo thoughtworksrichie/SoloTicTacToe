@@ -18,11 +18,24 @@ public class Game {
 
     public void go() throws IOException {
         Player currentPlayer = alternator.setFirstPlayer();
-        while(!board.isFull()) {
+        while(!(board.isFull() || wonBy(currentPlayer))) {
             board.draw();
             currentPlayer.move();
-            currentPlayer = alternator.toggleCurrentPlayer();
+            if (wonBy(currentPlayer)) {
+                out.printf("Player %s wins!\n", currentPlayer.getSymbol());
+            }else if(board.isFull()) {
+                out.println("Game is a draw.\n");
+            } else {
+                currentPlayer = alternator.toggleCurrentPlayer();
+            }
         }
-        out.println("Game is a draw.");
+        out.println("Game over.\n");
+    }
+
+    public Boolean wonBy(Player player) {
+        if (board.anyRowFilled(player) || board.anyColumnFilled(player) || board.anyDiagonalFilled(player)) {
+            return true;
+        }
+        return false;
     }
 }

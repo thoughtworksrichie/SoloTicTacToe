@@ -45,12 +45,33 @@ public class BoardTest {
         assertThat(moves.get(0), is(player.getSymbol()));
     }
 
-    //
-//  @Test
-//  public void shouldCheckForFullBoard() {
-//
-//    Board board = new Board();
-//  }
+    @Test
+    public void shouldReturnTrueWhenAnyRowFilled() {
+        when(player.getSymbol()).thenReturn("X");
+        board.setMoveForPlayer(0, player);
+        board.setMoveForPlayer(1, player);
+        board.setMoveForPlayer(2, player);
+        assertThat(board.anyRowFilled(player), is(true));
+    }
+
+    @Test
+    public void shouldReturnTrueWhenAnyColumnFilled() {
+        when(player.getSymbol()).thenReturn("X");
+        board.setMoveForPlayer(0, player);
+        board.setMoveForPlayer(3, player);
+        board.setMoveForPlayer(6, player);
+        assertThat(board.anyColumnFilled(player), is(true));
+    }
+
+    @Test
+    public void shouldReturnTrueWhenAnyDiagonalFilled() {
+        when(player.getSymbol()).thenReturn("X");
+        board.setMoveForPlayer(0, player);
+        board.setMoveForPlayer(4, player);
+        board.setMoveForPlayer(8, player);
+        board.draw();
+        assertThat(board.anyDiagonalFilled(player), is(true));
+    }
 
 
 }

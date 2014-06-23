@@ -44,4 +44,32 @@ public class Board {
         out.println(text);
     }
 
+    public Boolean anyRowFilled(Player player) {
+        String symbol = player.getSymbol();
+        if((getMoveAtPosition(0) == symbol && getMoveAtPosition(1) == symbol && getMoveAtPosition(2) == symbol) ||
+            (getMoveAtPosition(3) == symbol && getMoveAtPosition(4) == symbol && getMoveAtPosition(5) == symbol) ||
+            (getMoveAtPosition(7) == symbol && getMoveAtPosition(8) == symbol && getMoveAtPosition(8) == symbol)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean anyColumnFilled(Player player) {
+        String symbol = player.getSymbol();
+        if((getMoveAtPosition(0) == symbol && getMoveAtPosition(3) == symbol && getMoveAtPosition(6) == symbol) ||
+            (getMoveAtPosition(1) == symbol && getMoveAtPosition(4) == symbol && getMoveAtPosition(7) == symbol) ||
+            (getMoveAtPosition(2) == symbol && getMoveAtPosition(5) == symbol && getMoveAtPosition(8) == symbol)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean anyDiagonalFilled(Player player) {
+        String symbol = player.getSymbol();
+        if((getMoveAtPosition(0) == symbol && getMoveAtPosition(4) == symbol && getMoveAtPosition(8) == symbol) ||
+            (getMoveAtPosition(2) == symbol && getMoveAtPosition(4) == symbol && getMoveAtPosition(6) == symbol)) {
+            return true;
+        }
+        return false;
+    }
 }
